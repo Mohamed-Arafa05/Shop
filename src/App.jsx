@@ -1,29 +1,22 @@
-import React from 'react';
-import { Button } from "@material-tailwind/react";
-import Shop from './Shop';
-import Contact from './Contact';
+import { Routes, Route } from "react-router-dom";
+import Home from './Home';
+import Signup from './Signup';
+import Cart from './Cart'
 import Login from './Login';
-import Signin from './Signin';
-import Admin from './Admin';
-
+import Prodict from './Prodict';
 
 const App = () => {
-    return (
-        <div>
-          <Shop/>
-          <Admin/>
-          <Contact/>
-          <Login/>
-          <Signin/>
-            <h1>Hello, React!</h1>
-            <div className="flex w-max gap-4">
-      <Button variant="filled">filled</Button>
-      <Button variant="gradient">gradient</Button>
-      <Button variant="outlined">outlined</Button>
-      <Button variant="text">text</Button>
+  return (
+    <div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/Prodict" element={<Prodict />} />
+      <Route path="/Cart" element={<Cart />} />
+      <Route path="/Login" element={<Login />} />
+      <Route path="/Signup" element={<Signup />} />
+    </Routes>
     </div>
-        </div>
-    );
+  );
 };
 
 export default App;
