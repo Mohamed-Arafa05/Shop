@@ -114,7 +114,7 @@ const Prodict = () => {
               </Card>
             ))
           ) : (
-            <p className="text-center text-lg col-span-4">No products found</p>
+            <p className="text-center text-lg col-span-4">No prodict found</p>
           )}
         </div>
       </div>
