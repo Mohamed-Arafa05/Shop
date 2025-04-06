@@ -41,7 +41,7 @@ const NavList = ()=> {
       </Typography>
       <Typography
         as={Link}
-        to="/Login"
+        to="/Signup"
         variant="small"
         color="blue-gray"
         className="p-1 font-medium"
