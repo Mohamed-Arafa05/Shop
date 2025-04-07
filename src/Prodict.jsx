@@ -25,13 +25,13 @@ const Footer = () => (
   </footer>
 );
 
-const Prodict = () => {
+const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const userId = 1;
 
   useEffect(() => {
+   
     axios
       .get("https://fakestoreapi.com/products?limit=8")
       .then((res) => {
@@ -46,6 +46,7 @@ const Prodict = () => {
 
   const addToCart = async (product) => {
     try {
+      const userId = 1; 
       const response = await axios.get(`http://localhost:3000/users/${userId}`);
       const userData = response.data;
       let updatedCart = userData.cart || [];
@@ -61,8 +62,10 @@ const Prodict = () => {
         updatedCart.push({ ...product, quantity: 1, total: product.price });
       }
 
+     
       await axios.patch(`http://localhost:3000/users/${userId}`, { cart: updatedCart });
-      alert(`${product.title} added to cart!`);
+
+     
     } catch (error) {
       console.error("Error updating cart:", error);
     }
@@ -72,7 +75,7 @@ const Prodict = () => {
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading) return <p className="text-center text-lg">Loading products.</p>;
+  if (loading) return <p className="text-center text-lg">Loading products...</p>;
 
   return (
     <div>
@@ -92,11 +95,7 @@ const Prodict = () => {
             filteredProducts.map((product) => (
               <Card key={product.id} className="shadow-lg relative h-[350px] flex flex-col justify-between">
                 <CardHeader className="flex justify-center h-[150px]">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-32 h-full object-contain"
-                  />
+                  <img src={product.image} alt={product.title} className="w-32 h-full object-contain" />
                 </CardHeader>
                 <CardBody className="flex-grow">
                   <Typography variant="h5" className="font-bold line-clamp-2">
@@ -107,20 +106,25 @@ const Prodict = () => {
                   </Typography>
                 </CardBody>
                 <CardFooter className="absolute bottom-4 left-0 right-0 px-4">
-                  <Button color="blue" className="w-full" onClick={() => addToCart(product)}>
+                  <Button
+                    color="blue"
+                    className="w-full"
+                    onClick={() => addToCart(product)}  
+                  >
                     Add to Cart
                   </Button>
                 </CardFooter>
               </Card>
             ))
           ) : (
-            <p className="text-center text-lg col-span-4">No prodict found</p>
+            <p className="text-center text-lg col-span-4">No products found</p>
           )}
         </div>
       </div>
+
       <Footer />
     </div>
   );
 };
 
-export default Prodict;
+export default Products;
