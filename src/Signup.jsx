@@ -9,23 +9,36 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Signup = () => {
-  const [username, setUsername] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSignin = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    if (!username || !email || !password) {
+
+    if (!userName || !email || !password) {
       setError("All fields are required");
       return;
     }
-    setError("");
-    console.log("Creating account with", username, email, password);
-    navigate("/login");
+
+    try {
+      await axios.post("http://localhost:3000/users", {
+        userName,
+        email,
+        password,
+      });
+
+      setError("");
+      navigate("/login");
+    } catch (err) {
+      console.log(err);
+      setError("Something went wrong, try again.");
+    }
   };
 
   return (
@@ -40,19 +53,22 @@ const Signup = () => {
             Create Account
           </Typography>
         </CardHeader>
+
         <CardBody className="flex flex-col gap-4">
           {error && (
             <Typography color="red" className="text-red-500 text-center">
               {error}
             </Typography>
           )}
+
           <Input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            label="Username"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            label="UserName"
             size="lg"
             className="text-white bg-gray-800 border-gray-700"
           />
+
           <Input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -60,6 +76,7 @@ const Signup = () => {
             size="lg"
             className="text-white bg-gray-800 border-gray-700"
           />
+
           <Input
             label="Password"
             size="lg"
@@ -69,17 +86,22 @@ const Signup = () => {
             className="text-white bg-gray-800 border-gray-700"
           />
         </CardBody>
+
         <CardFooter className="pt-0">
           <Button
             type="submit"
             variant="gradient"
             fullWidth
             className="bg-white text-black font-bold"
-            onClick={handleSignin}
+            onClick={handleSignUp}
           >
             Create
           </Button>
-          <Typography variant="small" className="mt-6 flex justify-center text-gray-300">
+
+          <Typography
+            variant="small"
+            className="mt-6 flex justify-center text-gray-300"
+          >
             Have an account?
             <Typography
               as={Link}
