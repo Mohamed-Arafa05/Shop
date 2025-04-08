@@ -27,7 +27,7 @@ const Signup = () => {
     }
 
     try {
-      await axios.post("http://localhost:3000/users", {
+      await axios.post("http://localhost:3001/users", {
         userName,
         email,
         password,

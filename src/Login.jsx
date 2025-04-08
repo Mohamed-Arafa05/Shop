@@ -27,7 +27,7 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.get(`http://localhost:3000/users?email=${email}&password=${password}`);
+      const res = await axios.get(`http://localhost:3001/users?email=${email}&password=${password}`);
 
       if (res.data.length > 0) {
         localStorage.setItem("token", "dummyToken"); 
