@@ -22,7 +22,7 @@ const Navbar = ({ onCartClick }) => {
         {/* Center: Navigation Links (Hidden on small screens) */}
         <div className="hidden md:flex space-x-6 text-gray-300">
           <Link to="/" className="hover:text-white">Home</Link>
-          <Link to="/shop" className="hover:text-white">Shop</Link>
+          <Link to="/Prodict" className="hover:text-white">Shop</Link>
           <Link to="/contact" className="hover:text-white">Contact</Link>
         </div>
 
