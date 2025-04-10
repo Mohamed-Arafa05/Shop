@@ -30,7 +30,6 @@ const Login = () => {
       const res = await axios.get(`http://localhost:3000/users?email=${email}&password=${password}`);
 
       if (res.data.length > 0) {
-        localStorage.setItem("token", "dummyToken"); 
         navigate("/");
       } else {
         setError("Invalid email or password");

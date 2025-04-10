@@ -36,7 +36,6 @@ const Signup = () => {
       setError("");
       navigate("/login");
     } catch (err) {
-      console.log(err);
       setError("Something went wrong, try again.");
     }
   };
@@ -53,14 +52,8 @@ const Signup = () => {
             Create Account
           </Typography>
         </CardHeader>
-
         <CardBody className="flex flex-col gap-4">
-          {error && (
-            <Typography color="red" className="text-red-500 text-center">
-              {error}
-            </Typography>
-          )}
-
+          {error && <Typography color="red" className="text-red-500 text-center">{error}</Typography>}
           <Input
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
@@ -68,7 +61,6 @@ const Signup = () => {
             size="lg"
             className="text-white bg-gray-800 border-gray-700"
           />
-
           <Input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -76,7 +68,6 @@ const Signup = () => {
             size="lg"
             className="text-white bg-gray-800 border-gray-700"
           />
-
           <Input
             label="Password"
             size="lg"
@@ -86,7 +77,6 @@ const Signup = () => {
             className="text-white bg-gray-800 border-gray-700"
           />
         </CardBody>
-
         <CardFooter className="pt-0">
           <Button
             type="submit"
@@ -97,11 +87,7 @@ const Signup = () => {
           >
             Create
           </Button>
-
-          <Typography
-            variant="small"
-            className="mt-6 flex justify-center text-gray-300"
-          >
+          <Typography variant="small" className="mt-6 flex justify-center text-gray-300">
             Have an account?
             <Typography
               as={Link}
