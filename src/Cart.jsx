@@ -8,29 +8,31 @@ const Cart = ({ isOpen, onClose, loggedUser, setLoggedUser }) => {
   const [total, setTotal] = useState(0);
   const [cart, setCart] = useState(loggedUser?.cart || []);
 
-  // ✅ Ensure hooks run before returning null
   useEffect(() => {
     setCart(loggedUser?.cart || []);
   }, [loggedUser]);
 
   useEffect(() => {
-    const totalAmount = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const totalAmount = cart.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
     setTotal(totalAmount.toFixed(2));
   }, [cart]);
 
-  if (!isOpen) return null; // ✅ Now placed AFTER hooks
+  if (!isOpen) return null;
 
-  // ✅ Update only one item's quantity in JSON Server
   const updateQuantity = async (id, newQuantity) => {
-    if (newQuantity < 1) return; // Prevent negative quantity
+    if (newQuantity < 1) return;
 
     try {
       const updatedCart = cart.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity, total: newQuantity * item.price } : item
+        item.id === id
+          ? { ...item, quantity: newQuantity, total: newQuantity * item.price }
+          : item
       );
       setCart(updatedCart);
 
-      // Update only the modified item in JSON Server
       await axios.patch(`http://localhost:3000/users/${loggedUser.id}`, {
         cart: updatedCart,
       });
@@ -41,13 +43,11 @@ const Cart = ({ isOpen, onClose, loggedUser, setLoggedUser }) => {
     }
   };
 
-  // ✅ Remove only the selected item from cart
   const removeItem = async (id) => {
     try {
       const updatedCart = cart.filter((item) => item.id !== id);
       setCart(updatedCart);
 
-      // Update JSON Server
       await axios.patch(`http://localhost:3000/users/${loggedUser.id}`, {
         cart: updatedCart,
       });
@@ -58,19 +58,34 @@ const Cart = ({ isOpen, onClose, loggedUser, setLoggedUser }) => {
     }
   };
 
-  
+  const handleCheckout = async () => {
+    try {
+      const userId = loggedUser.id;
+      const newPurchased = [...(loggedUser.purchased || []), ...cart];
+
+      await axios.patch(`http://localhost:3000/users/${userId}`, {
+        cart: [],
+        purchased: newPurchased,
+      });
+
+      setCart([]);
+      setLoggedUser((prev) => ({ ...prev, cart: [], purchased: newPurchased }));
+    } catch (error) {
+      console.error("Checkout error:", error);
+    }
+  };
 
   return (
-    <div className="fixed top-0 right-0 w-96 h-full bg-white shadow-lg p-6 overflow-y-auto">
-      <div className="flex justify-between items-center">
-        <Typography variant="h3" className="text-black font-semibold">Your Cart</Typography>
-        <button onClick={onClose}>
+    <div className="fixed top-0 right-0 w-96 h-full bg-white shadow-lg p-6 overflow-y-auto z-50">
+      {/* Cart Header */}
+      <div className="flex items-center justify-between border-b pb-4 mb-4">
+        <h2 className="text-xl font-semibold text-black">Your cart</h2>
+        <button onClick={onClose} className="p-1 hover:opacity-70 transition">
           <XMarkIcon className="w-6 h-6 text-black" />
         </button>
       </div>
 
-      <hr className="border-t border-gray-300 my-4" />
-
+      {/* Column headers */}
       <div className="flex justify-between items-center text-gray-500 text-sm uppercase font-medium">
         <Typography variant="small">Product</Typography>
         <Typography variant="small">Total</Typography>
@@ -78,6 +93,7 @@ const Cart = ({ isOpen, onClose, loggedUser, setLoggedUser }) => {
 
       <hr className="border-t border-gray-300 my-2" />
 
+      {/* Cart items */}
       <div className="flex flex-col gap-3 overflow-scroll max-h-[calc(100vh-260px)]">
         {cart.length > 0 ? (
           cart.map((item) => (
@@ -89,24 +105,36 @@ const Cart = ({ isOpen, onClose, loggedUser, setLoggedUser }) => {
             />
           ))
         ) : (
-          <Typography variant="small" className="text-gray-500 text-center mt-4">
+          <Typography
+            variant="small"
+            className="text-gray-500 text-center mt-4"
+          >
             Your cart is empty
           </Typography>
         )}
       </div>
 
       <hr className="border-t border-gray-300 my-4" />
-<div className="flex justify-between items-center text-gray-500 text-sm uppercase font-medium">
-      <Typography variant="h6" className="text-black font-semibold">Total</Typography>
-      <Typography variant="h6" className="text-black font-semibold">LE {total}</Typography>
-</div>
-      
-      
+
+      {/* Total row */}
+      <div className="flex justify-between items-center text-gray-500 text-sm uppercase font-medium">
+        <Typography variant="h6" className="text-black font-semibold">
+          Total
+        </Typography>
+        <Typography variant="h6" className="text-black font-semibold">
+          LE {total}
+        </Typography>
+      </div>
+
       <Typography variant="small" className="text-gray-500 mt-1">
         Taxes, discounts and shipping calculated at checkout
       </Typography>
 
-      <Button className="mt-4 w-full bg-gray-200 text-black text-lg py-3 rounded-lg" disabled>
+      <Button
+        className="mt-4 w-full bg-black text-white text-lg py-3 rounded-lg"
+        onClick={handleCheckout}
+        disabled={cart.length === 0}
+      >
         Check out
       </Button>
     </div>
