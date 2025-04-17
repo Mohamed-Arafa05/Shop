@@ -11,7 +11,7 @@ const Home = ({loggedUser,setLoggedUser}) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get("https://fakestoreapi.com/products?limit=2").then((res) => {
+    axios.get("http://localhost:3000/products").then((res) => {
       setProducts(res.data);
     });
   }, []);
