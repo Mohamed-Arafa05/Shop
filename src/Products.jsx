@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Typography,
-  Button,
-  Input,
-} from "@material-tailwind/react";
+import { Card, CardBody, CardFooter, Typography, Button, Input } from "@material-tailwind/react";
 import axios from "axios";
 import ProductModal from "./ProductModal";
 
@@ -21,7 +14,6 @@ const Products = ({ loggedUser, setLoggedUser }) => {
       .get("http://localhost:3000/products")
       .then((res) => {
         setProducts(res.data);
-        console.log(res.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -67,36 +59,25 @@ const Products = ({ loggedUser, setLoggedUser }) => {
             filteredProducts.map((product) => (
               <Card key={product.id} className="rounded-2xl border border-gray-300 bg-white p-3">
                 <div className="relative rounded overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="h-64 w-full object-contain rounded-lg"
-                  />
-                  <span className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                    Sale
-                  </span>
+                  <img src={product.image} alt={product.title} className="h-64 w-full object-contain rounded-lg" />
+                  <span className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">Sale</span>
                 </div>
                 <CardBody className="text-center">
-                  <Typography className="text-sm font-semibold">
-                    {product.title}
-                  </Typography>
+                  <Typography className="text-sm font-semibold">{product.title}</Typography>
                   <div className="text-sm mt-2">
-                    <span className="line-through text-gray-400 mr-2">
-                      LE {(product.price * 1.2).toFixed(2)}
-                    </span>
+                    <span className="line-through text-gray-400 mr-2">LE {(product.price * 1.2).toFixed(2)}</span>
                     <span className="text-black font-bold">LE {product.price}</span>
                   </div>
                 </CardBody>
                 <CardFooter className="mt-2 text-center">
-                <Button
-  variant="outlined"
-  disabled={product.count === 0}
-  className="rounded-full border-2 px-6 py-2"
-  onClick={() => setSelectedProduct(product)}
->
-  {product.count === 0 ? "Out of Stock" : "add to cart"}
-</Button>
-
+                  <Button
+                    variant="outlined"
+                    disabled={product.count === 0}
+                    className="rounded-full border-2 px-6 py-2"
+                    onClick={() => setSelectedProduct(product)}
+                  >
+                    {product.count === 0 ? "Out of Stock" : "Add to Cart"}
+                  </Button>
                 </CardFooter>
               </Card>
             ))
@@ -110,6 +91,7 @@ const Products = ({ loggedUser, setLoggedUser }) => {
         product={selectedProduct}
         onClose={() => setSelectedProduct(null)}
         loggedUser={loggedUser}
+        setLoggedUser={setLoggedUser}
       />
     </div>
   );
